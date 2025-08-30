@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Valentine's Day Proposal</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+  html, body {
+    margin: 0; 
+    height: 100%;
+    font-family: 'Press Start 2P', cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+    position: relative;
+    /* Background image from your saved file in the same folder */
+    background-image: url('valentines bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  #envelope-container {
+    width: 300px;
+    height: 240px;
+    cursor: pointer;
+    perspective: 800px;
+    position: relative;
+    z-index: 10;
+  }
+
+  #envelope {
+    width: 300px;
+    height: 240px;
+    background: linear-gradient(135deg, #f8a5c2 0%, #f1cad5 100%);
+    border: 8px solid #c45881;
+    box-sizing: border-box;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    filter: pixelated;
+    position: relative;
+    transition: transform 0.7s ease;
+  }
+
+  #envelope:before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 120px;
+    background: linear-gradient(135deg, #f77f9b 0%, #e381a6 100%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    top: 0;
+    left: 0;
+    border-bottom: 8px solid #c45881;
+    filter: pixelated;
+    transform-origin: bottom center;
+    transition: transform 0.7s ease;
+    z-index: 10;
+  }
+
+  #envelope.open:before {
+    transform: rotateX(180deg);
+  }
+
+  #popup, #popup-yes {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #ffd6e8cc;
+    border: 8px solid #c45881;
+    padding: 40px 50px;
+    box-sizing: border-box;
+    font-size: 18px;
+    color: #9c2761;
+    text-align: center;
+    width: 600px;
+    height: 350px;
+    display: none;
+    filter: pixelated;
+    border-radius: 10px;
+    z-index: 100;
+  }
+
+  .heart {
+    width: 48px;
+    height: 42px;
+    background: #fa679f;
+    position: relative;
+    display: inline-block;
+    margin: 10px 12px;
+    filter: pixelated;
+  }
+
+  .heart:before, .heart:after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #fa679f;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .heart:before {
+    top: -12px;
+    left: 0;
+  }
+
+  .heart:after {
+    top: -12px;
+    right: 0;
+  }
+
+  button {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    background: #f77f9b;
+    border: 6px solid #c45881;
+    padding: 18px 40px;
+    margin: 20px 30px;
+    cursor: pointer;
+    color: #fff;
+    filter: pixelated;
+    border-radius: 8px;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #e65b87;
+  }
+
+  .confetti {
+    width: 10px;
+    height: 10px;
+    position: fixed;
+    pointer-events: none;
+    filter: pixelated;
+    z-index: 200;
+    opacity: 0.9;
+    will-change: transform;
+  }
+</style>
+</head>
+<body>
+
+<div id="envelope-container" title="Click to open">
+  <div id="envelope"></div>
+</div>
+
+<div id="popup">
+  <div>
+    <span class="heart"></span><span class="heart"></span><span class="heart"></span>
+  </div>
+  <p style="margin: 20px 0; font-size: 20px;">Will you go out with me for Valentine's Day?</p>
+  <button id="yes-btn">YES</button>
+  <button id="no-btn">NO</button>
+  <div>
+    <span class="heart"></span><span class="heart"></span><span class="heart"></span>
+  </div>
+</div>
+
+<div id="popup-yes">
+  <p style="font-size: 20px;">
+     Yay! 💖<br /><br />
+     Date: February 14, 2026<br />
+     Time: 7:00 PM<br />
+     Venue: Corner House, Koramangala <br /><br />
+     -love Dhyan ❤️
+  </p>
+  <div>
+    <span class="heart"></span><span class="heart"></span><span class="heart"></span>
+  </div>
+</div>
+
+<script>
+  const envelopeContainer = document.getElementById("envelope-container");
+  const envelope = document.getElementById("envelope");
+  const popup = document.getElementById("popup");
+  const popupYes = document.getElementById("popup-yes");
+  const yesBtn = document.getElementById("yes-btn");
+  const noBtn = document.getElementById("no-btn");
+
+  envelopeContainer.addEventListener("click", () => {
+    envelope.classList.add("open");
+    setTimeout(() => {
+      popup.style.display = "block";
+      envelopeContainer.style.display = "none";
+    }, 700);
+  });
+
+  noBtn.addEventListener("mousemove", (e) => {
+    const rect = noBtn.getBoundingClientRect();
+    const cursorX = e.clientX;
+    const cursorY = e.clientY;
+
+    const distX = Math.min(Math.abs(cursorX - rect.left), Math.abs(cursorX - rect.right));
+    const distY = Math.min(Math.abs(cursorY - rect.top), Math.abs(cursorY - rect.bottom));
+    const distance = Math.sqrt(distX * distX + distY * distY);
+
+    const threshold = 120;
+    if (distance < threshold) {
+      const yesRect = yesBtn.getBoundingClientRect();
+      const parentRect = popup.getBoundingClientRect();
+
+      const maxOffset = 80;
+      const newLeft = yesRect.left - parentRect.left + (Math.random() * maxOffset * 2 - maxOffset);
+      const newTop = yesRect.top - parentRect.top + (Math.random() * maxOffset * 2 - maxOffset);
+
+      noBtn.style.position = "absolute";
+      noBtn.style.left = `${newLeft}px`;
+      noBtn.style.top = `${newTop}px`;
+    }
+  });
+
+  noBtn.addEventListener("click", (e) => e.preventDefault());
+  popup.addEventListener("mouseleave", () => {
+    noBtn.style.position = "";
+    noBtn.style.left = "";
+    noBtn.style.top = "";
+  });
+
+  function createConfettiElement(color) {
+    const confetti = document.createElement("div");
+    confetti.className = "confetti";
+    confetti.style.backgroundColor = color;
+    confetti.style.left = Math.random() * window.innerWidth + "px";
+    confetti.style.top = "-10px";
+    return confetti;
+  }
+
+  function animateConfetti(confetti) {
+    const fallDuration = 3000 + Math.random() * 2000;
+    const startX = parseFloat(confetti.style.left);
+    const endX = startX + (Math.random() * 200 - 100); // drift left or right
+    const startTime = performance.now();
+
+    function fall(time) {
+      const elapsed = time - startTime;
+      if (elapsed < fallDuration) {
+        const progress = elapsed / fallDuration;
+        const currentX = startX + (endX - startX) * progress;
+        const currentY = progress * (window.innerHeight + 20);
+        confetti.style.transform = `translate(${currentX - startX}px, ${currentY}px) rotate(${progress * 360}deg)`;
+        requestAnimationFrame(fall);
+      } else {
+        confetti.remove();
+      }
+    }
+    requestAnimationFrame(fall);
+  }
+
+  function startConfettiRain(duration = 8000, frequency = 30) {
+    const colors = ["#fa679f", "#f77f9b", "#f8a5c2", "#e381a6", "#f1cad5"];
+    let intervalId = setInterval(() => {
+      for (let i = 0; i < 5; i++) {
+        const confetti = createConfettiElement(colors[Math.floor(Math.random() * colors.length)]);
+        document.body.appendChild(confetti);
+        animateConfetti(confetti);
+      }
+    }, frequency);
+
+    setTimeout(() => clearInterval(intervalId), duration);
+  }
+
+  yesBtn.addEventListener("click", () => {
+    popup.style.display = "none";
+    popupYes.style.display = "block";
+    startConfettiRain();
+  });
+</script>
+</body>
+</html>
