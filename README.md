@@ -1,4 +1,5 @@
-# Cupid_Card# Pixel Retro Valentine’s Day Card 💌✨
+# Cupid_Card
+Pixel Retro Valentine’s Day Card 💌✨
 
 A charming pixel art Valentine’s Day card featuring a cute envelope animation and playful interactive options.
 
